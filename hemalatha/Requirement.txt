@@ -1,0 +1,4 @@
+Panda
+scikit learn
+matplotlib
+flask
