@@ -1,51 +1,53 @@
-from flask import Flask, request
+from flask import Flask, render_template, request, redirect, url_for, session
 import pickle
 
 app = Flask(__name__)
+app.secret_key = 'supersecretkey'
 
-@app.route("/")
-def hello_world():
-    return "<p>Hello, Varenya!</p>"
-
-@app.route("/ping", methods=['GET'])
-def ping():
-    return "<p>Hey man! why are pinging me</p>"
-
-@app.route("/jjjjjj", methods = ["GET"])
-def jjjjjj():
-    return "<p>Hey man! i'm hear"
-
+# Load the model
 model_pickle = open(r"C:\Users\DELL\Desktop\MLOPs\Flask\hemalatha\classifier.pkl", "rb")
 clf = pickle.load(model_pickle)
 
-# defining the endpoint which will make the prediction
-@app.route("/prediction", methods=['POST'])
+# Dummy user credentials
+USER_CREDENTIALS = {'admin': 'password123'}
+
+@app.route('/')
+def login():
+    return render_template('login.html')
+
+@app.route('/login', methods=['POST'])
+def do_login():
+    username = request.form['username']
+    password = request.form['password']
+    if USER_CREDENTIALS.get(username) == password:
+        session['user'] = username
+        return redirect(url_for('dashboard'))
+    else:
+        return "Invalid username or password" 
+
+@app.route('/dashboard')
+def dashboard():
+    if 'user' not in session:
+        return redirect(url_for('login'))
+    return render_template('dashboard.html')
+
+@app.route('/prediction', methods=['POST'])
 def prediction():
-    """ Returns loan application status using ML model
-    """
-    loan_req = request.get_json()
-    print(loan_req)
-    if loan_req['Gender'] == "Male":
-        Gender = 0
-    else:
-        Gender = 1
-    if loan_req['Married'] == "Unmarried":
-        Married = 0
-    else:
-        Married = 1
-    if loan_req['Credit_History'] == "Unclear Debts":
-        Credit_History = 0
-    else:
-        Credit_History = 1
+    if 'user' not in session:
+        return redirect(url_for('login'))
+    try:
+        Gender = 0 if request.form['Gender'].lower() == "male" else 1
+        Married = 0 if request.form['Married'].lower() == "unmarried" else 1
+        Credit_History = 0 if request.form['Credit_History'].lower() == "unclear debts" else 1
+        ApplicantIncome = int(request.form['ApplicantIncome'])
+        LoanAmount = int(request.form['LoanAmount'])
 
-    ApplicantIncome = loan_req['ApplicantIncome']
-    LoanAmount = loan_req['LoanAmount']
+        result = clf.predict([[Gender, Married, ApplicantIncome, LoanAmount, Credit_History]])
+        pred = "Approved" if result == 1 else "Rejected"
 
-    result = clf.predict([[Gender, Married, ApplicantIncome, LoanAmount, Credit_History]])
+        return render_template('dashboard.html', prediction=pred)
+    except Exception as e:
+        return str(e)
 
-    if result == 0:
-        pred = "Rejected"
-    else:
-        pred = "Approved"
-
-    return {"loan_approval_status": pred}
+if __name__ == "__main__":
+    app.run(debug=True)
