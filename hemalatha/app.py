@@ -45,9 +45,18 @@ def prediction():
         result = clf.predict([[Gender, Married, ApplicantIncome, LoanAmount, Credit_History]])
         pred = "Approved" if result == 1 else "Rejected"
 
-        return render_template('dashboard.html', prediction=pred)
+        return redirect(url_for('result', prediction=pred))
     except Exception as e:
         return str(e)
+
+@app.route('/result')
+def result():
+    prediction = request.args.get('prediction')
+    if prediction == "Approved":
+        message = "Congratulations! Your loan application is approved."
+    else:
+        message = "Sorry! Your application is rejected."
+    return render_template('result.html', message=message)
 
 if __name__ == "__main__":
     app.run(debug=True)

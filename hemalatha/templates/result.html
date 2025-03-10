@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Loan Application Result</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(to right, #8e2de2, #4a00e0);
+            color: white;
+        }
+        .result-container {
+            background: white;
+            color: black;
+            padding: 40px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            margin-bottom: 20px;
+        }
+        a {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 20px;
+            background: #4a00e0;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        a:hover {
+            background: #8e2de2;
+        }
+    </style>
+</head>
+<body>
+    <div class="result-container">
+        <h2>{{ message }}</h2>
+        <a href="/dashboard">Back to Dashboard</a>
+    </div>
+</body>
+</html>
