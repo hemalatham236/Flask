@@ -9,7 +9,7 @@ model_pickle = open(r"C:\Users\DELL\Desktop\MLOPs\Flask\hemalatha\classifier.pkl
 clf = pickle.load(model_pickle)
 
 # Dummy user credentials
-USER_CREDENTIALS = {'admin': 'password123'}
+USER_CREDENTIALS = {'admin': 'password1'}
 
 @app.route('/')
 def login():
