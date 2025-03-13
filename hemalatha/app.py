@@ -5,7 +5,8 @@ app = Flask(__name__)
 app.secret_key = 'supersecretkey'
 
 # Load the model
-model_pickle = open(r"C:\Users\DELL\Desktop\MLOPs\Flask\hemalatha\classifier.pkl", "rb")
+model_pickle = open("classifier.pkl", "rb")
+
 clf = pickle.load(model_pickle)
 
 # Dummy user credentials
