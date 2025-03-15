@@ -1,4 +1,4 @@
-name: testing the application
+name: Testing the Application
 
 on:
   push:
@@ -7,31 +7,30 @@ on:
     branches: [ "main" ]
 
 jobs:
-    job1:
-        runs-on: ubuntu-latest
+  job1:
+    runs-on: ubuntu-latest
 
-        steps:
-        - uses: actions/checkout@v4
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
 
-        - name: Set up Python 3
-          uses: actions/setup-python@v3
-          with:
-            python-version: "3.11"
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.11"
 
-        - name: Upgrade pip
-          run: python -m pip install --upgrade pip
+    - name: Install Dependencies
+      run: |
+        pip install --upgrade pip
+        pip install -r hemalatha/requirements.txt  # ✅ Ensure correct path
 
-        - name: Installing Dependencies
-          run: pip install -r requirements.txt
+    - name: Move classifier.pkl (if needed)
+      run: |
+        if [ -f "hemalatha/classifier.pkl" ]; then
+          mv hemalatha/classifier.pkl .
+        fi
 
-        - name: Install pytest
-          run: pip install pytest  
-
-        - name: Debug Installed Packages
-          run: pip list  
-
-        - name: List repository files
-          run: ls -R  # ✅ Debug: Check if test.py exists
-
-        - name: Running test cases
-          run: pytest hemalatha/test.py  # ✅ Updated path to test.py
+    - name: Run Test Cases
+      run: |
+        cd hemalatha  # ✅ Change directory to where test.py is
+        pytest test.py
