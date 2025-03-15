@@ -25,10 +25,13 @@ jobs:
           run: pip install -r requirements.txt
 
         - name: Install pytest
-          run: pip install pytest  # ✅ Explicitly installing pytest
+          run: pip install pytest  
 
         - name: Debug Installed Packages
-          run: pip list  # ✅ Check if pytest is installed
+          run: pip list  
+
+        - name: List repository files
+          run: ls -R  # ✅ Debug: Check if test.py exists
 
         - name: Running test cases
-          run: pytest test.py
+          run: pytest hemalatha/test.py  # ✅ Updated path to test.py
