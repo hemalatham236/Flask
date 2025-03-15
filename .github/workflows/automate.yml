@@ -22,15 +22,12 @@ jobs:
     - name: Install Dependencies
       run: |
         pip install --upgrade pip
-        pip install -r hemalatha/requirements.txt  # ✅ Ensure correct path
+        pip install -r hemalatha/requirements.txt
 
-    - name: Move classifier.pkl (if needed)
-      run: |
-        if [ -f "hemalatha/classifier.pkl" ]; then
-          mv hemalatha/classifier.pkl .
-        fi
+    - name: Check if classifier.pkl exists
+      run: ls -l hemalatha/
 
     - name: Run Test Cases
       run: |
-        cd hemalatha  # ✅ Change directory to where test.py is
-        pytest test.py
+        export PYTHONPATH=$PYTHONPATH:$(pwd)/hemalatha
+        pytest hemalatha/test.py
