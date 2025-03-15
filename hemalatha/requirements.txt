@@ -2,3 +2,4 @@ Panda
 scikit-learn==1.6.1
 matplotlib
 flask
+pytest==8.1.1  # Or the latest version
